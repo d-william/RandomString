@@ -5,9 +5,24 @@ import java.util.Objects;
 
 public class RandomString {
 
+    /**
+     * The {@code String} that contains upper case letters.
+     */
     public static final String UPPER_CASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    /**
+     * The {@code String} that contains lower case letters.
+     */
     public static final String LOWER_CASE_LETTERS = UPPER_CASE_LETTERS.toLowerCase();
+
+    /**
+     * The {@code String} that contains digits.
+     */
     public static final String DIGITS = "0123456789";
+
+    /**
+     * The {@code String} that contains special characters.
+     */
     public static final String SPECIAL_CHARACTERS = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
 
     private final SecureRandom random;
@@ -86,7 +101,7 @@ public class RandomString {
      * @throws NullPointerException     if {@code random} is {@code null}.
      */
     public RandomString(SecureRandom random, String symbols) {
-        this(8, new SecureRandom(), symbols);
+        this(8, random, symbols);
     }
 
     /**
@@ -133,7 +148,7 @@ public class RandomString {
     }
 
     /**
-     * Generate a new random {@code String}.
+     * Generate a new {@code String}.
      *
      * @return the newly generated {@code String}.
      */
