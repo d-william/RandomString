@@ -23,7 +23,7 @@ public class RandomString {
     /**
      * The {@code String} that contains special characters.
      */
-    public static final String SPECIAL_CHARACTERS = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+    public static final String SPECIAL_CHARACTERS = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~\"";
 
     private final SecureRandom random;
     private final char[] symbols;
