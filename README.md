@@ -16,4 +16,4 @@ String string = random.nextString();
 
 ## Dowload
 
-[commons-string-generator-1.0.2.jar](https://github.com/d-william/RandomString/releases/download/1.0.2/commons-string-generator-1.0.2.jar)
+[commons-string-generator-1.1.0.jar](https://github.com/d-william/RandomString/releases/download/1.1.0/commons-string-generator-1.1.0.jar)
