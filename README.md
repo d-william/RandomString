@@ -14,6 +14,23 @@ RandomString random = new RandomString(16, "abcd");
 String string = random.nextString();
 ```
 
-## Dowload
-
-[commons-string-generator-1.1.0.jar](https://github.com/d-william/RandomString/releases/download/1.1.0/commons-string-generator-1.1.0.jar)
+## Maven
+### Repository
+File: <i>pom.xml</i>
+```Xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+### Dependency
+File: <i>pom.xml</i>
+```Xml
+<dependency>
+    <groupId>com.github.d-william</groupId>
+    <artifactId>commons-string-generator</artifactId>
+    <version>1.1.0</version>
+</dependency>
+```
