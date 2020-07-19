@@ -26,7 +26,7 @@ public class RandomString {
     public static final String SPECIAL_CHARACTERS = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~\"";
 
     private final SecureRandom random;
-    private final char[] symbols;
+    private final String symbols;
     private final char[] buffer;
 
     /**
@@ -43,7 +43,7 @@ public class RandomString {
         if (length < 1) throw new IllegalArgumentException();
         if (symbols.length() < 1) throw new IllegalArgumentException();
         this.random = Objects.requireNonNull(random);
-        this.symbols = symbols.toCharArray();
+        this.symbols = symbols;
         this.buffer = new char[length];
     }
 
@@ -154,7 +154,7 @@ public class RandomString {
      */
     public String nextString() {
         for (int idx = 0; idx < buffer.length; ++idx)
-            buffer[idx] = symbols[random.nextInt(symbols.length)];
+            buffer[idx] = symbols.charAt(random.nextInt(symbols.length()));
         return new String(buffer);
     }
 
