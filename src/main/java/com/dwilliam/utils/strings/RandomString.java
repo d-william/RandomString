@@ -1,7 +1,8 @@
-package com.infinity.utils;
+package com.dwilliam.utils.strings;
 
 import java.security.SecureRandom;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RandomString {
 
@@ -25,26 +26,28 @@ public class RandomString {
      */
     public static final String SPECIAL_CHARACTERS = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~\"";
 
+    private static final int[] ONE_TIME = {1};
+
     private final SecureRandom random;
-    private final String symbols;
-    private final char[] buffer;
+    private final int[] alphabet;
+    private final int[] buffer;
 
     /**
      * Constructs a secure random String generator.
      *
      * @param length  The length of generated strings
      * @param random  The {@code SecureRandom} used to generate strings
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if {@code length} is lower to 0
      * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
      * @throws NullPointerException     if {@code random} is {@code null}
      */
-    public RandomString(int length, SecureRandom random, String symbols) {
-        if (length < 1) throw new IllegalArgumentException();
-        if (symbols.length() < 1) throw new IllegalArgumentException();
+    public RandomString(int length, SecureRandom random, String alphabet) {
+        if (length < 0) throw new IllegalArgumentException();
+        if (alphabet.length() < 1) throw new IllegalArgumentException();
         this.random = Objects.requireNonNull(random);
-        this.symbols = symbols;
-        this.buffer = new char[length];
+        this.buffer = new int[length];
+        this.alphabet = alphabet.codePoints().toArray();
     }
 
     /**
@@ -53,7 +56,7 @@ public class RandomString {
      *
      * @param length The length of generated strings
      * @param random The {@code SecureRandom} used for generate strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
+     * @throws IllegalArgumentException if {@code length} is lower to 0
      * @throws NullPointerException     if {@code random} is {@code null}
      * @see #UPPER_CASE_LETTERS
      * @see #LOWER_CASE_LETTERS
@@ -67,13 +70,13 @@ public class RandomString {
      * Constructs a secure random String generator with default {@code SecureRandom} implementation.
      *
      * @param length  The length of generated strings
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
-     * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if {@code length} is lower to 0
+     * @throws IllegalArgumentException if the length of {@code alphabet} is lower to 1
      * @see SecureRandom#SecureRandom()
      */
-    public RandomString(int length, String symbols) {
-        this(length, new SecureRandom(), symbols);
+    public RandomString(int length, String alphabet) {
+        this(length, new SecureRandom(), alphabet);
     }
 
     /**
@@ -82,7 +85,7 @@ public class RandomString {
      * digits.
      *
      * @param length The length of generated strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
+     * @throws IllegalArgumentException if {@code length} is lower to 0
      * @see #UPPER_CASE_LETTERS
      * @see #LOWER_CASE_LETTERS
      * @see #DIGITS
@@ -96,12 +99,12 @@ public class RandomString {
      * Constructs a secure random String generator that generate {@code String} of length 8.
      *
      * @param random  The {@code SecureRandom} used for generate strings
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if the length of {@code symbols} is lower or equals to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if the length of {@code alphabet} is lower or equals to 1
      * @throws NullPointerException     if {@code random} is {@code null}
      */
-    public RandomString(SecureRandom random, String symbols) {
-        this(8, random, symbols);
+    public RandomString(SecureRandom random, String alphabet) {
+        this(8, random, alphabet);
     }
 
     /**
@@ -122,12 +125,12 @@ public class RandomString {
      * Constructs a secure random String generator with default {@code SecureRandom} implementation
      * and that generate String of length 8.
      *
-     * @param symbols The characters that can appear in generated strings
+     * @param alphabet The characters that can appear in generated strings
      * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
      * @see SecureRandom#SecureRandom()
      */
-    public RandomString(String symbols) {
-        this(8, symbols);
+    public RandomString(String alphabet) {
+        this(8, alphabet);
     }
 
     /**
@@ -153,9 +156,10 @@ public class RandomString {
      * @return the newly randomly generated {@code String}
      */
     public String nextString() {
-        for (int idx = 0; idx < buffer.length; ++idx)
-            buffer[idx] = symbols.charAt(random.nextInt(symbols.length()));
-        return new String(buffer);
+        for (int i = 0; i < this.buffer.length; i++) {
+            this.buffer[i] = this.alphabet[this.random.nextInt(this.alphabet.length)];
+        }
+        return new String(this.buffer, 0, this.buffer.length);
     }
 
     /**
@@ -163,13 +167,13 @@ public class RandomString {
      *
      * @param length  The length of generated strings
      * @param random  The {@code SecureRandom} used for generate strings
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
-     * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if {@code length} is lower to 0
+     * @throws IllegalArgumentException if the length of {@code alphabet} is lower to 1
      * @throws NullPointerException     if {@code random} is {@code null}
      */
-    public static String newString(int length, SecureRandom random, String symbols) {
-        return new RandomString(length, random, symbols).nextString();
+    public static String newString(int length, SecureRandom random, String alphabet) {
+        return new RandomString(length, random, alphabet).nextString();
     }
 
     /**
@@ -177,7 +181,7 @@ public class RandomString {
      *
      * @param length The length of generated strings
      * @param random The {@code SecureRandom} used for generate strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
+     * @throws IllegalArgumentException if {@code length} is lower to 0
      * @throws NullPointerException     if {@code random} is {@code null}
      * @see #UPPER_CASE_LETTERS
      * @see #LOWER_CASE_LETTERS
@@ -192,14 +196,14 @@ public class RandomString {
      * Generates a new {@code String} with default {@code SecureRandom} implementation.
      *
      * @param length  The length of generated strings
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
-     * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if {@code length} is lower to 0
+     * @throws IllegalArgumentException if the length of {@code alphabet} is lower to 1
      * @see SecureRandom#SecureRandom()
      * @return the newly randomly generated {@code String}
      */
-    public static String newString(int length, String symbols) {
-        return new RandomString(length, new SecureRandom(), symbols).nextString();
+    public static String newString(int length, String alphabet) {
+        return new RandomString(length, new SecureRandom(), alphabet).nextString();
     }
 
     /**
@@ -208,7 +212,7 @@ public class RandomString {
      * digits.
      *
      * @param length The length of generated strings
-     * @throws IllegalArgumentException if {@code length} is lower to 1
+     * @throws IllegalArgumentException if {@code length} is lower to 0
      * @see #UPPER_CASE_LETTERS
      * @see #LOWER_CASE_LETTERS
      * @see #DIGITS
@@ -223,13 +227,13 @@ public class RandomString {
      * Generates a new {@code String} of length 8.
      *
      * @param random  The {@code SecureRandom} used for generate strings
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if the length of {@code alphabet} is lower to 1
      * @throws NullPointerException     if {@code random} is {@code null}
      * @return the newly randomly generated {@code String}
      */
-    public static String newString(SecureRandom random, String symbols) {
-        return new RandomString(8, random, symbols).nextString();
+    public static String newString(SecureRandom random, String alphabet) {
+        return new RandomString(8, random, alphabet).nextString();
     }
 
     /**
@@ -251,13 +255,13 @@ public class RandomString {
      * Generates a new {@code String} with default {@code SecureRandom} implementation
      * and that generate String of length 8.
      *
-     * @param symbols The characters that can appear in generated strings
-     * @throws IllegalArgumentException if the length of {@code symbols} is lower to 1
+     * @param alphabet The characters that can appear in generated strings
+     * @throws IllegalArgumentException if the length of {@code alphabet} is lower to 1
      * @see SecureRandom#SecureRandom()
      * @return the newly randomly generated {@code String}
      */
-    public static String newString(String symbols) {
-        return new RandomString(8, symbols).nextString();
+    public static String newString(String alphabet) {
+        return new RandomString(8, alphabet).nextString();
     }
 
     /**
